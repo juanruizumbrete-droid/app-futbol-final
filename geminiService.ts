@@ -9,15 +9,24 @@ if (!API_KEY) {
 
 const genAI = new GoogleGenerativeAI(API_KEY);
 
-// FUNCIÓN 1: Plan de entrenamiento (La que ya tenías)
-export const generateTrainingPlan = async (prompt: string) => {
+// 1. GENERADOR DE SESIONES (Lo que falló ahora)
+export const generateTrainingSession = async (params: {
+  category: Category;
+  level: Level;
+  objective: string;
+  duration: number;
+  players: number;
+}): Promise<Partial<TrainingSession>> => {
   const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  const prompt = `Como experto entrenador RFAF/CEDIFA, diseña una sesión de entrenamiento de fútbol.
+  Categoría: ${params.category}, Nivel: ${params.level}, Objetivo: ${params.objective}.`;
+  
   const result = await model.generateContent(prompt);
   const response = await result.response;
-  return response.text();
+  return { description: response.text() };
 };
 
-// FUNCIÓN 2: Objetivos de Temporada (La que Netlify echa de menos)
+// 2. OBJETIVOS DE TEMPORADA (Lo que arreglamos antes)
 export const generateSeasonObjectives = async (params: {
   category: Category;
   level: Level;
@@ -25,15 +34,14 @@ export const generateSeasonObjectives = async (params: {
   type: 'técnicos' | 'tácticos' | 'formativos';
 }): Promise<string> => {
   const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-  const prompt = `Como experto coordinador metodológico RFAF/CEDIFA, propón objetivos específicos para la planificación de temporada.
-  Categoría: ${params.category}, Nivel: ${params.level}, Fase: ${params.phase}, Tipo: ${params.type}.`;
+  const prompt = `Objetivos para ${params.category} en fase ${params.phase}.`;
   
   const result = await model.generateContent(prompt);
   const response = await result.response;
   return response.text();
 };
 
-// FUNCIÓN 3: Chat con Asistente (Para que no falle el resto de la app)
+// 3. ASISTENTE DE CHAT
 export const chatWithAssistant = async (message: string, context: { activeTeam: Team | null }) => {
   const model = genAI.getGenerativeModel({ model: "gemini-pro" });
   const result = await model.generateContent(message);
