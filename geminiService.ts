@@ -3,8 +3,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(API_KEY || "");
 
-// Usamos el nombre técnico exacto para evitar errores de versión
-const MODEL_NAME = "gemini-1.5-flash-latest";
+// Este es el nombre de modelo más compatible que no dará error 404
+const MODEL_NAME = "gemini-1.5-flash";
 
 export const chatWithAssistant = async (message: string) => {
   try {
@@ -14,7 +14,7 @@ export const chatWithAssistant = async (message: string) => {
     return response.text();
   } catch (error) {
     console.error("Error en Gemini Chat:", error);
-    return "Error de conexión. Por favor, refresca la página e inténtalo de nuevo.";
+    return "Error de conexión. Por favor, intenta de nuevo en unos segundos.";
   }
 };
 
