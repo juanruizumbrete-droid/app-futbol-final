@@ -2,13 +2,13 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
-// Inicializamos la IA con un control por si la clave no carga a tiempo
+// Inicializamos la IA con el modelo gemini-pro que es el más estable
 const genAI = new GoogleGenerativeAI(API_KEY || "");
 
-// 1. FUNCIÓN PARA EL CHAT (Asistente IA)
+// 1. FUNCIÓN PARA EL CHAT
 export const chatWithAssistant = async (message: string) => {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     const result = await model.generateContent(message);
     const response = await result.response;
     return response.text();
@@ -18,10 +18,10 @@ export const chatWithAssistant = async (message: string) => {
   }
 };
 
-// 2. FUNCIÓN PARA ENTRENAMIENTOS (Entrenamientos)
+// 2. FUNCIÓN PARA ENTRENAMIENTOS
 export const generateTrainingSession = async (params: any) => {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     const prompt = `Genera una sesión de entrenamiento profesional para: ${params.objective || 'fútbol'}`;
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -32,10 +32,10 @@ export const generateTrainingSession = async (params: any) => {
   }
 };
 
-// 3. FUNCIÓN PARA OBJETIVOS (Temporada) - ¡Esta es la que faltaba!
+// 3. FUNCIÓN PARA OBJETIVOS
 export const generateSeasonObjectives = async (params: any) => {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     const prompt = `Genera objetivos de temporada para la categoría: ${params.category || 'fútbol'}`;
     const result = await model.generateContent(prompt);
     const response = await result.response;
