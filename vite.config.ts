@@ -3,6 +3,6 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  // Cambiamos a base vacía para que Vercel decida la mejor ruta
-  base: '', 
+  // Esto obliga a usar rutas relativas, lo que suele arreglar el 404 del CSS
+  base: './', 
 })
