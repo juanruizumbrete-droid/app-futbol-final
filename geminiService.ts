@@ -1,14 +1,16 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-// Forzamos la inicialización básica sin especificar versión para que la librería decida
+
+// Creamos la conexión base
 const genAI = new GoogleGenerativeAI(API_KEY || "");
 
-// Probamos con el nombre de modelo más estándar y compatible
+// Usamos el nombre de modelo que es universalmente aceptado
 const MODEL_NAME = "gemini-1.5-flash";
 
 export const chatWithAssistant = async (message: string) => {
   try {
+    // IMPORTANTE: No especificamos versión de API aquí, dejamos que la librería use su valor por defecto estable
     const model = genAI.getGenerativeModel({ model: MODEL_NAME });
     const result = await model.generateContent(message);
     const response = await result.response;
