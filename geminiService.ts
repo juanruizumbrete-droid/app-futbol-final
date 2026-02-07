@@ -3,19 +3,19 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(API_KEY || "");
 
-// CAMBIO CLAVE: Usamos el modelo 1.5-flash pero forzando la versión estable 'v1'
-const MODEL_NAME = "gemini-1.5-flash";
+// Nombre completo oficial para evitar el error 404
+const MODEL_NAME = "models/gemini-1.5-flash";
 
 export const chatWithAssistant = async (message: string) => {
   try {
-    // Forzamos v1 en lugar de v1beta para evitar el error 404
+    // Forzamos la apiVersion a 'v1' que es la que ya reconoce tu consola
     const model = genAI.getGenerativeModel({ model: MODEL_NAME }, { apiVersion: 'v1' });
     const result = await model.generateContent(message);
     const response = await result.response;
     return response.text();
   } catch (error) {
     console.error("Error en Gemini Chat:", error);
-    return "Error de conexión. Por favor, intenta de nuevo.";
+    return "Error de conexión. Por favor, intenta de nuevo en unos segundos.";
   }
 };
 
