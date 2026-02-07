@@ -1,26 +1,30 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+
+// Forzamos el uso de la versión 'v1' para evitar el error 404 de la v1beta
 const genAI = new GoogleGenerativeAI(API_KEY || "");
 
-// Modelo estándar compatible con la mayoría de las API Keys
-const MODEL_NAME = "gemini-1.5-flash";
+const MODEL_CONFIG = {
+  model: "gemini-1.5-flash",
+  apiVersion: "v1" // <--- ESTA ES LA CLAVE
+};
 
 export const chatWithAssistant = async (message: string) => {
   try {
-    const model = genAI.getGenerativeModel({ model: MODEL_NAME });
+    const model = genAI.getGenerativeModel(MODEL_CONFIG);
     const result = await model.generateContent(message);
     const response = await result.response;
     return response.text();
   } catch (error) {
     console.error("Error en Gemini Chat:", error);
-    return "Error de conexión. Inténtalo de nuevo en unos segundos.";
+    return "Error de conexión. Por favor, refresca la página e inténtalo de nuevo.";
   }
 };
 
 export const generateTrainingSession = async (params: any) => {
   try {
-    const model = genAI.getGenerativeModel({ model: MODEL_NAME });
+    const model = genAI.getGenerativeModel(MODEL_CONFIG);
     const prompt = `Genera una sesión de entrenamiento para: ${params.objective || 'fútbol'}`;
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -33,7 +37,7 @@ export const generateTrainingSession = async (params: any) => {
 
 export const generateSeasonObjectives = async (params: any) => {
   try {
-    const model = genAI.getGenerativeModel({ model: MODEL_NAME });
+    const model = genAI.getGenerativeModel(MODEL_CONFIG);
     const prompt = `Genera objetivos para: ${params.category || 'fútbol'}`;
     const result = await model.generateContent(prompt);
     const response = await result.response;
