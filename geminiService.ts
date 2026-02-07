@@ -1,31 +1,31 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(API_KEY || "");
-
-// Usamos el nombre base sin prefijos, que es el más compatible
-const MODEL_NAME = "gemini-1.5-flash";
+// Tu nueva dirección de Render
+const BACKEND_URL = "https://backend-entrenador-ia.onrender.com/api/chat";
 
 export const chatWithAssistant = async (message: string) => {
   try {
-    // Dejamos que la librería gestione la versión de la API por defecto
-    const model = genAI.getGenerativeModel({ model: MODEL_NAME });
-    const result = await model.generateContent(message);
-    const response = await result.response;
-    return response.text();
+    const response = await fetch(BACKEND_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message })
+    });
+    const data = await response.json();
+    return data.text;
   } catch (error) {
-    console.error("Error en Gemini Chat:", error);
-    return "Error de conexión. Por favor, intenta de nuevo.";
+    console.error("Error en Chat:", error);
+    return "Error de conexión con el servidor. Intenta de nuevo.";
   }
 };
 
 export const generateTrainingSession = async (params: any) => {
   try {
-    const model = genAI.getGenerativeModel({ model: MODEL_NAME });
-    const prompt = `Genera un entrenamiento para: ${params.objective || 'fútbol'}`;
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    return { description: response.text() };
+    const prompt = `Genera un entrenamiento detallado para: ${params.objective || 'fútbol'}. Incluye ejercicios y duración.`;
+    const response = await fetch(BACKEND_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: prompt })
+    });
+    const data = await response.json();
+    return { description: data.text };
   } catch (error) {
     console.error("Error en entrenamientos:", error);
     throw error;
@@ -34,11 +34,14 @@ export const generateTrainingSession = async (params: any) => {
 
 export const generateSeasonObjectives = async (params: any) => {
   try {
-    const model = genAI.getGenerativeModel({ model: MODEL_NAME });
-    const prompt = `Genera objetivos para: ${params.category || 'fútbol'}`;
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    return response.text();
+    const prompt = `Genera objetivos de temporada para la categoría: ${params.category || 'fútbol'}.`;
+    const response = await fetch(BACKEND_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: prompt })
+    });
+    const data = await response.json();
+    return data.text;
   } catch (error) {
     console.error("Error en objetivos:", error);
     throw error;
