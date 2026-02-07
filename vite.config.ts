@@ -3,6 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  // Esto obliga a usar rutas relativas, lo que suele arreglar el 404 del CSS
-  base: './', 
+  base: '', // Déjalo vacío, sin el punto ni la barra
 })
