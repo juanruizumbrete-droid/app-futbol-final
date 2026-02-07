@@ -3,5 +3,6 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '', // Déjalo vacío, sin el punto ni la barra
+  // Dejar la base vacía ayuda a Vercel a resolver las rutas de los archivos .css
+  base: '', 
 })
