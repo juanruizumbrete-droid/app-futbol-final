@@ -3,6 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  // Dejar la base vacía ayuda a Vercel a resolver las rutas de los archivos .css
-  base: '', 
+  // Al no poner base, Vite gestionará las rutas de forma automática para Vercel
 })
