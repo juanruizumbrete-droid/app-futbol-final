@@ -46,4 +46,4 @@ export const generateSeasonObjectives = async (params: any) => {
     console.error("Error en objetivos:", error);
     throw error;
   }
-};
+}; 
